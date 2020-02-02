@@ -10,14 +10,13 @@ class Weather extends Component {
     temperatureList: "",
     icon: "",
     description: "",
-    isLoaded: false
+
   }
 
 
   updateCity = city => this.setState({ city })
   updateCountry = country => this.setState({ country })
   updateTemperature = temp => this.setState({ temperatureList: temp })
-  setLoaded = setLoad => this.setState({ isLoaded: setLoad })
 
   setWeatherIcon = (icons, id, text) => {
     switch (true) {
@@ -73,18 +72,25 @@ class Weather extends Component {
 
   render() {
     return (
-      <div>
-        {this.state.isLoaded &&
-        <div>
-          <p> {this.state.city.toUpperCase()}, {this.state.country.toUpperCase()}</p>
-          <i className={`wi ${this.state.icon} display-1`}/>
-          <br/><br/>
-          <span>{Math.round(this.state.temperatureList)}&#176;</span>
-          <br/>
-          <span>{this.state.description}</span>
-         </div>
-        }
-        <SearchBar updateCity={this.updateCity} updateCountry={this.updateCountry} updateTemperature={this.updateTemperature} setWeatherIcon={this.setWeatherIcon} setLoaded={this.setLoaded}/>
+      <div className="container-fluid d-flex flex-column justify-content-center align-items-center p-5">
+        <SearchBar
+          updateCity={this.updateCity}
+          updateCountry={this.updateCountry}
+          updateTemperature={this.updateTemperature}
+          setWeatherIcon={this.setWeatherIcon}
+        />
+        {this.state.city !== "" && this.state.country ? (
+          <div className="text-light">
+              <p> {this.state.city.toUpperCase()}, {this.state.country.toUpperCase()}</p>
+              <i className={`wi ${this.state.icon} display-2`}/>
+              <br/><br/>
+              <span>{Math.round(this.state.temperatureList)}&#176;</span>
+              <span>{this.state.description.toUpperCase()}</span>
+              <br/>
+          </div>
+        ): (
+          null
+        )}
       </div>
     )
   }

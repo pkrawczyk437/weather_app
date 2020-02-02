@@ -4,7 +4,7 @@ import { weatherIcon} from "../weatherIconClasses/weatherIconClasses"
 class SearchBar extends Component {
   state = {
     city: "",
-    country: "",
+    countryCode: "",
   }
 
 
@@ -17,22 +17,26 @@ class SearchBar extends Component {
     }
 
   handleClick = () => {
-    const { city, country } = this.state
-    getWeather(city, country).then(({main: {temp}, weather: [{id, description}], sys: {country}, name}) => {
-      const { updateCity, updateCountry, updateTemperature, setWeatherIcon, setLoaded} = this.props
-      updateCity(name)
-      updateCountry(country)
-      updateTemperature(temp)
-      setWeatherIcon(weatherIcon, id, description)
-      setLoaded(true)
-    })
+    const { city, countryCode } = this.state
+    const { updateCity, updateCountry, updateTemperature, setWeatherIcon} = this.props
+    if(city && countryCode) {
+      getWeather(city, countryCode).then(({main: {temp}, weather: [{id, description}], sys: {country}, name}) => {
+        updateCity(name)
+        updateCountry(country)
+        updateTemperature(temp)
+        setWeatherIcon(weatherIcon, id, description)
+      })
+    }
+    else {
+      alert("Please enter values for all fields!")
+    }
   }
   render() {
     return (
     <div>
-        <input type="text" name="city" placeholder="Enter your city" onChange={this.handleChange}/>
-        <input type="text" name="country" placeholder="Enter your country" onChange={this.handleChange}/>
-        <button onClick={this.handleClick}>Show weather</button>
+        <input type="text" name="city" placeholder="Enter your city" onChange={this.handleChange} className="m-2"/>
+        <input type="text" name="countryCode" placeholder="Enter your country" onChange={this.handleChange} className="m-2"/>
+        <button className="btn btn-secondary" onClick={this.handleClick}>Show weather</button>
     </div>
     )
   }
