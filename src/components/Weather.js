@@ -1,85 +1,36 @@
 import React, {Component} from 'react'
-import SearchBar from './Search'
+import Search from './Search'
+import { getWeatherIcons } from '../client/getWeatherIcons'
 import '../styles/weather-icons.css'
 import 'bootstrap/dist/css/bootstrap.css';
-class Weather extends Component {
+import '../styles/Weather.css'
 
+class Weather extends Component {
   state = {
     city: "",
     country: "",
     temperatureList: "",
     icon: "",
-    description: "",
-
+    description: ""
   }
 
-
-  updateCity = city => this.setState({ city })
-  updateCountry = country => this.setState({ country })
-  updateTemperature = temp => this.setState({ temperatureList: temp })
-
-  setWeatherIcon = (icons, id, text) => {
-    switch (true) {
-      case id >= 200 && id < 232:
-        this.setState({
-          icon: icons.Thunderstorm,
-          description: text
-        });
-        break;
-      case id >= 300 && id <= 321:
-        this.setState({
-          icon: icons.Drizzle,
-          description: text
-        });
-        break;
-      case id >= 500 && id <= 521:
-        this.setState({
-          icon: icons.Rain,
-          description: text
-        });
-        break;
-      case id >= 600 && id <= 622:
-        this.setState({
-          icon: icons.Snow,
-          description: text
-        });
-        break;
-      case id >= 701 && id <= 781:
-        this.setState({
-          icon: icons.Atmosphere,
-          description: text
-        });
-        break;
-      case id === 800:
-        this.setState({
-          icon: icons.Clear,
-          description: text
-        });
-        break;
-      case id >= 801 && id <= 804:
-        this.setState({
-          icon: icons.Clouds,
-          description: text
-        });
-        break;
-      default:
-        this.setState({
-          icon: icons.Clouds,
-          description: text
-        });
-    }
+  showWeather = (cityName, countryName, temperature, id, weatherIcon, info) => {
+    this.setState({
+      city: cityName,
+      country: countryName,
+      temperatureList: temperature,
+      description: info,
+      icon: getWeatherIcons(id, weatherIcon),
+    })
   }
 
   render() {
     return (
       <div className="container-fluid d-flex flex-column justify-content-center align-items-center p-5">
-        <SearchBar
-          updateCity={this.updateCity}
-          updateCountry={this.updateCountry}
-          updateTemperature={this.updateTemperature}
-          setWeatherIcon={this.setWeatherIcon}
+        <Search
+          showWeather = {this.showWeather}
         />
-        {this.state.city !== "" && this.state.country ? (
+        {this.state.city !== "" && this.state.country !== "" &&
           <div className="text-light">
               <p> {this.state.city.toUpperCase()}, {this.state.country.toUpperCase()}</p>
               <i className={`wi ${this.state.icon} display-2`}/>
@@ -88,9 +39,7 @@ class Weather extends Component {
               <span>{this.state.description.toUpperCase()}</span>
               <br/>
           </div>
-        ): (
-          null
-        )}
+        }
       </div>
     )
   }

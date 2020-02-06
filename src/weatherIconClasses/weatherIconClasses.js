@@ -1,4 +1,4 @@
-export const weatherIcon = {
+export const weatherIcons = {
   Thunderstorm: "wi-thunderstorm",
   Drizzle: "wi-sleet",
   Rain: "wi-storm-showers",

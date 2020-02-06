@@ -1,13 +1,12 @@
 import React, { Component } from 'react'
-import { getWeather } from '../client/client'
-import { weatherIcon} from "../weatherIconClasses/weatherIconClasses"
-class SearchBar extends Component {
+import { getWeather } from '../client/getWeather'
+import { weatherIcons } from "../weatherIconClasses/weatherIconClasses"
+
+class Search extends Component {
   state = {
     city: "",
     countryCode: "",
   }
-
-
 
   handleChange = event => {
     const {target: {value, name}} = event
@@ -18,19 +17,17 @@ class SearchBar extends Component {
 
   handleClick = () => {
     const { city, countryCode } = this.state
-    const { updateCity, updateCountry, updateTemperature, setWeatherIcon} = this.props
+    const { showWeather } = this.props
     if(city && countryCode) {
       getWeather(city, countryCode).then(({main: {temp}, weather: [{id, description}], sys: {country}, name}) => {
-        updateCity(name)
-        updateCountry(country)
-        updateTemperature(temp)
-        setWeatherIcon(weatherIcon, id, description)
+        showWeather(name, country, temp, id, weatherIcons, description)
       })
     }
     else {
       alert("Please enter values for all fields!")
     }
   }
+
   render() {
     return (
     <div>
@@ -42,4 +39,4 @@ class SearchBar extends Component {
   }
 }
 
-export default SearchBar
+export default Search
